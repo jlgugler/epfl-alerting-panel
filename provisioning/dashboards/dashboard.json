@@ -18,69 +18,372 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
-        "type": "grafana",
-        "uid": "grafana"
+        "default": false,
+        "type": "datasource",
+        "uid": "-- Mixed --"
       },
+      "description": "",
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 16,
+        "w": 21,
         "x": 0,
         "y": 0
       },
-      "id": 1,
+      "id": 3,
       "options": {
-        "seriesCountSize": "sm",
-        "showSeriesCount": false,
-        "text": "Default value of text input option"
+        "PDUTextsize": "12",
+        "RackTextsize": "10",
+        "TooltipTextsize": "12",
+        "pduSize": 5,
+        "pduURL": "/d/ddqco4d3utj4asd/datacenter-view-pdu",
+        "rackSize": 30,
+        "rackURL": "/d/cdou123admle29sf/datacenter-view-rack",
+        "rowTextsize": "10",
+        "rowURL": "/d/cdou123admle29sf/datacenter-view-rack",
+        "tooltips": true
       },
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "prometheus"
           },
-          "queryType": "randomWalk",
-          "refId": "A"
-        }
-      ],
-      "title": "Panel Title",
-      "type": "epfl-alerting-panel"
-    },
-    {
-      "datasource": {
-        "type": "grafana-testdata-datasource",
-        "uid": "trlxrdZVk"
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "seriesCountSize": "sm",
-        "showSeriesCount": false,
-        "text": "Default value of text input option"
-      },
-      "targets": [
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "up{dc_name=\"$dc_name\"}",
+          "format": "table",
+          "fullMetaSearch": false,
+          "hide": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "alertingStatus",
+          "useBackend": false
+        },
         {
-          "alias": "",
           "datasource": {
-            "type": "grafana-testdata-datasource",
-            "uid": "db84e60d-b92a-4089-82cb-34842fb1754b"
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
           },
-          "refId": "A",
-          "scenarioId": "no_data_points"
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM rack WHERE dc_name = '$dc_name' ",
+          "refId": "rackInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "9aaba9ba-cdef-4012-b456-71928fe5a968",
+                  "properties": {
+                    "field": "dc_name",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      "$dc_name"
+                    ],
+                    "valueError": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "8a89ba8a-0123-4456-b89a-b1928fe53679",
+              "type": "group"
+            },
+            "whereString": "dc_name = '$dc_name'"
+          },
+          "table": "rack"
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM pdu WHERE dc_name = '$dc_name' AND pdu_type ='PDU'",
+          "refId": "pduInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "9aaba9ba-cdef-4012-b456-71928fe5a968",
+                  "properties": {
+                    "field": "dc_name",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      "$dc_name"
+                    ],
+                    "valueError": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "8a89ba8a-0123-4456-b89a-b1928fe53679",
+              "type": "group"
+            },
+            "whereString": "dc_name = '$dc_name'"
+          },
+          "table": "rack"
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM pdu WHERE dc_name = '$dc_name' AND pdu_type ='FAN'",
+          "refId": "fanInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "9aaba9ba-cdef-4012-b456-71928fe5a968",
+                  "properties": {
+                    "field": "dc_name",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      "$dc_name"
+                    ],
+                    "valueError": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "8a89ba8a-0123-4456-b89a-b1928fe53679",
+              "type": "group"
+            },
+            "whereString": "dc_name = '$dc_name'"
+          },
+          "table": "rack"
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM pdu WHERE rail_name ~ '$dc_name' AND pdu_type ='UPS'",
+          "refId": "upsInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "9aaba9ba-cdef-4012-b456-71928fe5a968",
+                  "properties": {
+                    "field": "dc_name",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      "$dc_name"
+                    ],
+                    "valueError": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "8a89ba8a-0123-4456-b89a-b1928fe53679",
+              "type": "group"
+            },
+            "whereString": "dc_name = '$dc_name'"
+          },
+          "table": "rack"
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM pdu WHERE  pdu_type ='RAIL'",
+          "refId": "railInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [
+                  {
+                    "name": "*",
+                    "type": "functionParameter"
+                  }
+                ],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50,
+            "whereJsonTree": {
+              "children1": [
+                {
+                  "id": "9aaba9ba-cdef-4012-b456-71928fe5a968",
+                  "properties": {
+                    "field": "dc_name",
+                    "fieldSrc": "field",
+                    "operator": "equal",
+                    "value": [
+                      "$dc_name"
+                    ],
+                    "valueError": [
+                      null
+                    ],
+                    "valueSrc": [
+                      "value"
+                    ],
+                    "valueType": [
+                      "text"
+                    ]
+                  },
+                  "type": "rule"
+                }
+              ],
+              "id": "8a89ba8a-0123-4456-b89a-b1928fe53679",
+              "type": "group"
+            },
+            "whereString": "dc_name = '$dc_name'"
+          },
+          "table": "rack"
         }
       ],
-      "title": "Panel Title",
+      "title": "$dc_name",
       "type": "epfl-alerting-panel"
     }
   ],
@@ -88,7 +391,24 @@
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "> CCT",
+          "value": "CCT"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "dc_name",
+        "options": [],
+        "query": "",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -96,8 +416,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned alerting dashboard",
+  "title": "Provisioned pdu3 dashboard",
   "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
-  "version": 1,
+  "version": 7,
   "weekStart": ""
 }
