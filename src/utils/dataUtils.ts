@@ -26,16 +26,27 @@ export function retrieveData<T extends DataItem>(
     .flatMap((s, seriesIndex) => {
       const fieldsMap: Record<string, Field<any>> = {};
 
-      // Build the field mapping, case-insensitive
+      // Build the field mapping, matching fields that contain the field name
       fieldMapping.forEach(fieldName => {
-        const field = s.fields.find(f => f.name.toLowerCase() === fieldName.toLowerCase());
+        const field = s.fields.find(f => f.name.toLowerCase().includes(fieldName.toLowerCase()));
         if (field) {
           fieldsMap[fieldName] = field;
         }
       });
 
-      // Find the value field, accept '_value' or 'Value' (case-insensitive)
-      const valueField = s.fields.find(f => ['_value', 'value'].includes(f.name.toLowerCase()));
+      // Find the value field, accept '_value' or 'value' (case-insensitive)
+      let valueField = s.fields.find(f => ['_value', 'value'].includes(f.name.toLowerCase()));
+
+      if (!valueField) {
+        console.log("valueField not found, attempting to find a matching field");
+        // If not found, search for a field whose name contains '_value' or 'value' (case-insensitive)
+        valueField = s.fields.find((f) => {
+          const nameLower = f.name.toLowerCase();
+          return ['_value', 'value'].some((val) => nameLower.includes(val));
+        });
+      }
+
+      console.log("valueField found", valueField);
 
       // Ensure the primary field is present
       const primaryFieldName = fieldMapping[0];
@@ -56,12 +67,16 @@ export function retrieveData<T extends DataItem>(
         fieldMapping.forEach(fieldName => {
           const field = fieldsMap[fieldName];
           if (field) {
-            item[fieldName] = field.values.get(index);
+            const value = field.values.get(index);
+            item[fieldName] = value !== undefined ? value : '';
+          } else {
+            item[fieldName] = '';
           }
         });
 
         // Include the value field in the item
-        item['_value'] = valueField.values.get(index);
+        const valueFieldValue = valueField.values.get(index);
+        item['_value'] = valueFieldValue !== undefined ? valueFieldValue : '';
 
         items.push(item as T);
       }
@@ -69,3 +84,4 @@ export function retrieveData<T extends DataItem>(
       return items;
     });
 }
+

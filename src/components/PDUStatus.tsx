@@ -10,21 +10,21 @@ interface PDUStatusProps {
   options: any;
 }
 
-export const PDUStatus: React.FC<PDUStatusProps> = ({ pdu, size = 'sm', showName = false, options }) => {
+export const PDUStatus: React.FC<PDUStatusProps> = ({ pdu, size = 'md', showName = false, options }) => {
   // Determine the size of the square based on the size prop
-  const xSize = size === 'sm' ? `${options.pduSize}px` : size === 'md' ? `${options.pduSize * 2}px` : `${options.pduSize}px`;
-  const ySize = size === 'sm' ? `${options.rackSize *.8 }px` : size === 'md' ? `${options.pduSize * 2}px` : `${options.rackSize}px`;
+  const xSize = size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * .18}px` : `${options.rackSize* 1.5 *.2}px`;
+  const ySize = size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * 1.2 }px` : `${options.rackSize* 1.5 *.8}px`;
   const styles = {
     pdu: css`
       width: ${xSize};
       height: ${ySize};
-      background-color: ${+pdu.value > 0 ? 'green' : 'red'};
+      background-color: ${+pdu.value > 0 ? options.successColor : options.errorColor};
       margin-right: 1px;
       cursor: pointer;
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: rgba(128, 255, 128, 0.5); /* Lighter color on hover */
+        background-color: ${options.activeColor};
       }
     `,
   };

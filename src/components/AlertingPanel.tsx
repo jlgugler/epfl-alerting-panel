@@ -48,7 +48,6 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
   const styles = useStyles2(getStyles);
 
   if (data.series.length === 0) {
-    console.error('No series data received from Prometheus datasource.');
     return (
       <PanelDataErrorView
         fieldConfig={fieldConfig}
@@ -73,6 +72,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
     '_value',
   ];
   const RailInfoFieldMapping = [
+    'pdu_master',
     'pdu_name',
     'pdu_group',
     'pdu_model',
@@ -121,13 +121,27 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
   ];
 
   const PduStatusFieldMapping = [
+    'host_name',
     'pdu_name',
     'row_name',
     'rack_name',
     'rack_fname',
     'Value',
-    '_value',
+
   ];
+
+  const TcpStatusFieldMapping = [
+    'host_name',
+    'pdu_name',
+    'row_name',
+    'rack_name',
+    'rack_fname',
+    'probe_success',
+    'Value',
+    
+
+  ];
+
   // Retrieve data using the utility function
   const rawRackData: any[] = retrieveData<any>(
     data.series as DataFrame[],
@@ -147,6 +161,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
     PduStatusFieldMapping
   );
   console.log("rawPduStatusData", rawPduStatusData)
+
   const rawRailData: any[] = retrieveData<any>(
     data.series as DataFrame[],
     'railInfo',
@@ -165,6 +180,22 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
       UpsInfoFieldMapping
   );
 
+  const rawTcpData: any[] = retrieveData<any>(
+    data.series as DataFrame[],
+      'tcpStatus',
+      TcpStatusFieldMapping
+  );
+
+  console.log("rawTcpData", rawTcpData)
+
+  const combinedUpsData = rawUpsData.map((ups) => {
+    const status = rawPduStatusData.find((status: any) => status.pdu_name === ups.pdu_name);
+    return {
+      ...ups,
+      value: status ? status.Value : null
+    };
+  });
+
   const rowList: { row_id: string; row_name: string }[] = useMemo(() => {
     const rowMap = new Map<string, string>(); // Key: row_name, Value: row_id
     rawRackData.forEach((item) => {
@@ -180,7 +211,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
   return (
     <div className={styles.AlertingPanelContainer}>
       <div className={styles.upsContainer}>
-        {rawUpsData.map((ups) => {
+        {combinedUpsData.map((ups) => {
           return (
             <UpsStatus 
               ups={ups}
@@ -199,7 +230,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
                 (rack) => rack.row_name === row.row_name
               );
               const filteredPduStatusData = rawPduStatusData.filter(
-                (pdu) => pdu.row_name === row.row_name
+                (pdu) => pdu.row_name === row.row_name || pdu.device_type === "modbus"
               );
               return (
             <RowStatus 
@@ -209,6 +240,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
               railData={rawRailData}
               fanData={rawFanData}
               pduStatusData={filteredPduStatusData}
+              tcpStatusData={rawTcpData}
               options={options}
               
             />
@@ -216,7 +248,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
         })}
       </div>
       <div className={styles.textBox}>
-        PDU Panel by EPFL/ITOP-INFR v.0.1.2
+        PDU Panel by EPFL/ITOP-INFR v.0.2
       </div>
     </div>
   );

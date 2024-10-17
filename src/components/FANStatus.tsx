@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/css';
+import { Tooltip } from '@grafana/ui';
 // Define the type for options
 
 
@@ -18,29 +19,32 @@ export const FANStatus: React.FC<FANStatusProps> = ({ pdu, size = 'sm', showName
     fansContainer: css`
       display: flex;
       flex-direction: column;
+      gap: 2px;
     `,
     fans: css`
       width: ${xSize};
       height: ${ySize};
-      margin-bottom: 1px;
-      background-color: ${+pdu.value > 0 ? 'green' : 'red'};
-      margin-right: 1px;
+      
+      background-color: ${+pdu.value > 0 ? options.successColor : options.errorColor};
+      
       cursor: pointer;
       transition: background-color 0.3s;
 
       &:hover {
-        background-color: rgba(128, 255, 128, 0.5); /* Lighter color on hover */
+        background-color: ${options.activeColor};
       }
     `,
   };
   return (
     <div className={styles.fansContainer}>
       {Array.from({ length: 4 }).map((_, index) => (
+        <Tooltip content={pdu.pdu_name} placement="auto">
         <div
           key={index}
           className={styles.fans}
           onClick={() => window.open(`${options.pduURL}?var-pdu_name=${pdu.pdu_name}`, '_blank')}
         />
+        </Tooltip>
       ))}
       {showName && <span>{pdu.pdu_name}</span>}
     </div>

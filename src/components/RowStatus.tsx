@@ -12,10 +12,11 @@ interface RowStatusProps {
   options: any;
   row: any;
   pduStatusData: any[];
+  tcpStatusData: any[];
 }
 
 
-const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, railData, row, pduStatusData, fanData }) => {
+const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, railData, row, pduStatusData, fanData, tcpStatusData }) => {
   const styles = {
     container: css`
       display: flex;
@@ -38,7 +39,7 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
       min-width: 50px;
 
       &:hover {
-        color: rgba(255, 255, 128, 1); /* Lighter color on hover */
+        color: ${options.activeColor};
       }
     `,
     rackContainer: css`
@@ -47,9 +48,14 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
       
     `,
     railContainer: css`
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      padding: 1px;
+      background-color: #333;
+      padding: 5px;
       gap: 5px;
+      margin-top: 10px;
       margin-left: 5px;
       margin-right: 10px;
     `,
@@ -72,13 +78,39 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
   );
 
 
-  const railDataForCurrentRow = railData.filter((rail: any) => {
-    if (typeof rail.pdu_name === 'string' && typeof row.row_name === 'string') {
-      return rail.pdu_name.toLowerCase().includes(row.row_name.toLowerCase());
-    }
-    return false;
-  });
+// Updated code starts here
+const railDataForCurrentRow = railData
+.filter((rail: any) => {
+  if (
+    typeof rail.pdu_name === 'string' &&
+    typeof row.row_name === 'string'
+  ) {
+    return rail.pdu_name
+      .toLowerCase()
+      .includes(row.row_name.toLowerCase());
+  }
+  return false;
+})
+.map((rail: any) => {
+  // Extract 'masterx' from pdu_name
+  const masterNameMatch = rail.pdu_name.match(/(master\d+)/i);
+  const master_name = masterNameMatch ? masterNameMatch[1] : null;
 
+  return {
+    ...rail,
+    master_name: master_name, // Add the new field here
+    };
+  });
+  console.log("railDataForCurrentRow", railDataForCurrentRow)
+  console.log("tcpStatusData", tcpStatusData)
+  const combinedRailData = railDataForCurrentRow.map((rail: any) => {
+    const status = tcpStatusData.find((status: any) => status.host_name === rail.master_name);
+    return {
+      ...rail,
+      value: status ? status._value : null
+    };
+  });
+  console.log("combinedRailData", combinedRailData)
   return (
     <div className={styles.container}>
       <div className={styles.rowheader}>
@@ -102,7 +134,7 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
       </div>
       <div className={styles.railContainer}>
 
-        {railDataForCurrentRow.map((rail) => (
+        {combinedRailData.map((rail) => (
           <RailStatus 
             rail={rail}
             options={options}

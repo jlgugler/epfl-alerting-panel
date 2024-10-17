@@ -16,14 +16,14 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
   const [_isHovered, setIsHovered] = useState(false);
 
   const styles = {
-    container: css`
+    pduContainer: css`
       width: ${options.rackSize}px;
-      height: ${options.rackSize}px;
+      height: ${options.rackSize * 1.4 }px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: 1fr;
-      gap: 2px;
-      padding: 2px;
+      
+      padding: 1px;
       background-color: #333;
     `,
     rectangle: css`
@@ -33,7 +33,7 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
     rackName: css`
       font-size: ${options.RackTextsize}px; 
       &:hover {
-        color: rgba(255, 255, 128, 1); /* Lighter color on hover */
+        color: ${options.activeColor};
       }
     `,
     rackContainer: css`
@@ -45,6 +45,7 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 2px;
     `,
     fan: css`
       margin-right: 2px;
@@ -62,8 +63,6 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
   const fanDataForCurrentRack = fanData.filter(
     (fan: any) => fan.rack_fname === rack.rack_fname
   );
-console.log("pduDataForCurrentRack", pduDataForCurrentRack)
-console.log("pduStatusDataForCurrentRack", pduStatusDataForCurrentRack)
 
 const combinedPduData = pduDataForCurrentRack.map((pdu: any) => {
   const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === pdu.pdu_name);
@@ -72,7 +71,14 @@ const combinedPduData = pduDataForCurrentRack.map((pdu: any) => {
     value: status ? status.Value : null
   };
 });
-console.log("combinedPduData", combinedPduData)
+
+const combinedFanData = fanDataForCurrentRack.map((fan: any) => {
+  const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === fan.pdu_name);
+  return {
+    ...fan,
+    value: status ? status.Value : null
+  };
+});
 
   const tooltipContent = pduDataForCurrentRack.length > 0 ? (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -80,7 +86,7 @@ console.log("combinedPduData", combinedPduData)
         <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
           <PDUStatus
             pdu={pdu}
-            size='md'
+            size='sm'
             showName={true}
             options={options}
           />
@@ -102,7 +108,7 @@ console.log("combinedPduData", combinedPduData)
       </div> 
       <div className={styles.rackContainer}>
         <div className={styles.fanContainer}>
-          {fanDataForCurrentRack.map((fan: any, index: any) => (
+          {combinedFanData.map((fan: any, index: any) => (
             <div key={index} className={styles.fan}>
               <FANStatus 
                 pdu={fan} 
@@ -118,12 +124,12 @@ console.log("combinedPduData", combinedPduData)
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <div className={styles.container}>
+            <div className={styles.pduContainer}>
             {combinedPduData.map((pdu: any, index: any) => (
                 <PDUStatus 
                 key={index} 
                 pdu={pdu} 
-                size='sm'
+                size='md'
                 showName={false}
                 options={options}
                 />
