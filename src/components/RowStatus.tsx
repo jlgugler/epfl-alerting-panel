@@ -101,8 +101,6 @@ const railDataForCurrentRow = railData
     master_name: master_name, // Add the new field here
     };
   });
-  console.log("railDataForCurrentRow", railDataForCurrentRow)
-  console.log("tcpStatusData", tcpStatusData)
   const combinedRailData = railDataForCurrentRow.map((rail: any) => {
     const status = tcpStatusData.find((status: any) => status.host_name === rail.master_name);
     return {
@@ -110,7 +108,6 @@ const railDataForCurrentRow = railData
       value: status ? status._value : null
     };
   });
-  console.log("combinedRailData", combinedRailData)
   return (
     <div className={styles.container}>
       <div className={styles.rowheader}>
@@ -132,7 +129,9 @@ const railDataForCurrentRow = railData
 
 
       </div>
-      <div className={styles.railContainer}>
+      
+      {combinedRailData.length > 0 && (
+      <div id="railContainer" className={styles.railContainer}>
 
         {combinedRailData.map((rail) => (
           <RailStatus 
@@ -141,7 +140,7 @@ const railDataForCurrentRow = railData
           />
         ))}
 
-      </div>
+      </div>)}
       <div className={styles.rackContainer}>
        
         

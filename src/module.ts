@@ -63,7 +63,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(AlertingPanel).setPanelOpti
       path: 'upsURL', 
       name: 'upsURL',
       description: 'UPS URL',
-      defaultValue: '/d/cdou123admle29sf/datacenter-view-ups',
+      defaultValue: '/d/ae0ubbk3if400d/datacenter-view-ups',
       category: ['UPS'],
     })
 
@@ -87,7 +87,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(AlertingPanel).setPanelOpti
       path: 'railURL', 
       name: 'railURL',
       description: 'Rail URL',
-      defaultValue: '/d/cdou123admle29sf/datacenter-view-rail',
+      defaultValue: '/d/fdyyae74x0irka/datacenter-view-rail',
       category: ['Rail'],
     })  
     .addTextInput({
@@ -118,6 +118,15 @@ export const plugin = new PanelPlugin<SimpleOptions>(AlertingPanel).setPanelOpti
       defaultValue: '/d/cdou123admle29sf/datacenter-view-rack',
       category: ['Rack'],
     })
+
+    .addTextInput({
+      path: 'fanURL', 
+      name: 'fanURL',
+      description: 'Fan URL',
+      defaultValue: '/d/ce0xm7wjr9ywwe/datacenter-view-fan',
+      category: ['Rack'],
+    })
+
     .addTextInput({
       path: 'RackTextsize', 
       name: 'Rack Textsize',

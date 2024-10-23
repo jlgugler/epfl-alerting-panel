@@ -38,7 +38,6 @@ export function retrieveData<T extends DataItem>(
       let valueField = s.fields.find(f => ['_value', 'value'].includes(f.name.toLowerCase()));
 
       if (!valueField) {
-        console.log("valueField not found, attempting to find a matching field");
         // If not found, search for a field whose name contains '_value' or 'value' (case-insensitive)
         valueField = s.fields.find((f) => {
           const nameLower = f.name.toLowerCase();
@@ -46,14 +45,11 @@ export function retrieveData<T extends DataItem>(
         });
       }
 
-      console.log("valueField found", valueField);
-
       // Ensure the primary field is present
       const primaryFieldName = fieldMapping[0];
       const primaryField = fieldsMap[primaryFieldName];
 
       if (!primaryField || !valueField) {
-        console.log("Missing required fields:", { primaryField, valueField });
         return []; // Required fields are missing
       }
 

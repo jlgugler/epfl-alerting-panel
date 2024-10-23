@@ -42,7 +42,7 @@ export const FANStatus: React.FC<FANStatusProps> = ({ pdu, size = 'sm', showName
         <div
           key={index}
           className={styles.fans}
-          onClick={() => window.open(`${options.pduURL}?var-pdu_name=${pdu.pdu_name}`, '_blank')}
+          onClick={() => window.open(`${options.fanURL}?var-pdu_name=${pdu.pdu_name}`, '_blank')}
         />
         </Tooltip>
       ))}

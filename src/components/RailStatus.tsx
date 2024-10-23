@@ -57,7 +57,7 @@ export const RailStatus: React.FC<RailStatusProps> = ({ rail, size = 'md', showN
         <div>
           <div
             className={styles.rail}
-            onClick={() => window.open(`${options.pduURL}?var-pdu_name=${rail.pdu_name}`, '_blank')}
+            onClick={() => window.open(`${options.railURL}?var-pdu_name=${rail.pdu_name}`, '_blank')}
             />
           {showName && <span>{rail.pdu_name}</span>}
         </div>

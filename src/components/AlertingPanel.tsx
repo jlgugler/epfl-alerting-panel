@@ -160,7 +160,6 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
     'alertingStatus',
     PduStatusFieldMapping
   );
-  console.log("rawPduStatusData", rawPduStatusData)
 
   const rawRailData: any[] = retrieveData<any>(
     data.series as DataFrame[],
@@ -185,8 +184,6 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
       'tcpStatus',
       TcpStatusFieldMapping
   );
-
-  console.log("rawTcpData", rawTcpData)
 
   const combinedUpsData = rawUpsData.map((ups) => {
     const status = rawPduStatusData.find((status: any) => status.pdu_name === ups.pdu_name);

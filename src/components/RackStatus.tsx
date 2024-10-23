@@ -101,7 +101,7 @@ const combinedFanData = fanDataForCurrentRack.map((fan: any) => {
     <div>
     <div 
       className={styles.rackName}
-      onClick={() => window.open(`${options.rackURL}?var-rack_fname=${rack.rack_name}`, '_blank')}
+      onClick={() => window.open(`${options.rackURL}?var-rack_fname=${rack.rack_fname}`, '_blank')}
       style={{ cursor: 'pointer' }}
     >
       {rack.rack_name}

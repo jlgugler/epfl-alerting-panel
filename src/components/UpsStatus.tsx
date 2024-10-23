@@ -23,7 +23,7 @@ export const UpsStatus: React.FC<UpsStatusProps> = ({ ups, size = 'sm', showName
       justify-content: left;
       
     `,
-    
+
     ups: css`
       display: flex;
       width: ${xSize};
@@ -67,7 +67,7 @@ export const UpsStatus: React.FC<UpsStatusProps> = ({ ups, size = 'sm', showName
           <div className={styles.upsName}>{upsName}</div>
           <div
             className={styles.ups}
-            onClick={() => window.open(`${options.upsURL}?var-ups_name=${ups.ups_name}`, '_blank')}
+            onClick={() => window.open(`${options.upsURL}?var-ups_name=${ups.pdu_name}`, '_blank')}
             />
           {showName && <span>{ups.ups_name}</span>}
         </div>
