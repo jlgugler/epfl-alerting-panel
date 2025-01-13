@@ -5,15 +5,15 @@ import { css } from '@emotion/css';
 
 interface PDUStatusProps {
   pdu: any;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' |	 'sm' | 'md' | 'lg';
   showName?: boolean;
   options: any;
 }
 
 export const PDUStatus: React.FC<PDUStatusProps> = ({ pdu, size = 'md', showName = false, options }) => {
   // Determine the size of the square based on the size prop
-  const xSize = size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * .18}px` : `${options.rackSize* 1.5 *.2}px`;
-  const ySize = size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * 1.2 }px` : `${options.rackSize* 1.5 *.8}px`;
+  const xSize = size === 'xs' ? `${options.rackSize *.18 *1}px` : size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * .18}px` : `${options.rackSize* 1.5 *.2}px`;
+  const ySize = size === 'xs' ? `${options.rackSize * 0.6}px` : size === 'sm' ? `${options.rackSize *.2 *2}px` : size === 'md' ? `${options.rackSize * 1.2 }px` : `${options.rackSize* 1.5 *.8}px`;
   const styles = {
     pdu: css`
       width: ${xSize};

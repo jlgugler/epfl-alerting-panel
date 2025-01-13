@@ -27,6 +27,9 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
     rowName: css`
       font-weight: bold;
       margin-bottom: 2px;
+      margin-right: 2px;
+      margin-left: 2px;
+      
       font-size: ${options.rowTextsize}px;
       color: #aaa;
       cursor: pointer;
@@ -36,7 +39,10 @@ const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, rail
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      min-width: 50px;
+      
+      width: 100px;
+      word-wrap: break-word;
+      white-space: normal;
 
       &:hover {
         color: ${options.activeColor};
@@ -108,6 +114,7 @@ const railDataForCurrentRow = railData
       value: status ? status._value : null
     };
   });
+
   return (
     <div className={styles.container}>
       <div className={styles.rowheader}>
@@ -120,10 +127,10 @@ const railDataForCurrentRow = railData
         }>
           <div 
             className={styles.rowName}
-            onClick={() => window.open(`${options.rowURL}?var-row=${row.row_name}`, '_blank')}
+            onClick={() => window.open(`${options.rowURL}?var-row_name=${row.row_name}&var-dc_name=${row.dc_name}`, '_blank')}
             style={{ cursor: 'pointer' }}
           >
-            {row.row_name}
+            <div style={{ wordWrap: 'break-word' }}>{row.row_name}</div>
           </div>
         </Tooltip>
 

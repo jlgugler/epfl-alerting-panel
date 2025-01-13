@@ -15,10 +15,12 @@ interface RackStatusProps {
 export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduData, pduStatusData, fanData }) => {
   const [_isHovered, setIsHovered] = useState(false);
 
+
+
   const styles = {
     pduContainer: css`
       width: ${options.rackSize}px;
-      height: ${options.rackSize * 1.4 }px;
+      height: ${options.rackSize * 1.4}px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: 1fr;
@@ -51,42 +53,43 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
       margin-right: 2px;
     `,
   };
-
+  
   const pduDataForCurrentRack = pduData.filter(
     (pdu: any) => pdu.rack_fname === rack.rack_fname
   );
-
+  
   const pduStatusDataForCurrentRack = pduStatusData.filter(
     (pdu: any) => pdu.rack_fname === rack.rack_fname
   );
-
+  
   const fanDataForCurrentRack = fanData.filter(
     (fan: any) => fan.rack_fname === rack.rack_fname
   );
 
-const combinedPduData = pduDataForCurrentRack.map((pdu: any) => {
-  const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === pdu.pdu_name);
-  return {
-    ...pdu,
-    value: status ? status.Value : null
-  };
-});
-
-const combinedFanData = fanDataForCurrentRack.map((fan: any) => {
-  const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === fan.pdu_name);
-  return {
-    ...fan,
-    value: status ? status.Value : null
-  };
-});
+  const combinedPduData = pduDataForCurrentRack.map((pdu: any) => {
+    const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === pdu.pdu_name);
+    return {
+      ...pdu,
+      value: status ? status.Value : null
+    };
+  });
+  
+  const combinedFanData = fanDataForCurrentRack.map((fan: any) => {
+    const status = pduStatusDataForCurrentRack.find((status: any) => status.pdu_name === fan.pdu_name);
+    return {
+      ...fan,
+      value: status ? status.Value : null
+    };
+  });
 
   const tooltipContent = pduDataForCurrentRack.length > 0 ? (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {combinedPduData.map((pdu: any, index: any) => (
         <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
           <PDUStatus
+            size={combinedPduData.length>4 ? 'xs' : 'sm'}
             pdu={pdu}
-            size='sm'
+            
             showName={true}
             options={options}
           />
@@ -129,7 +132,7 @@ const combinedFanData = fanDataForCurrentRack.map((fan: any) => {
                 <PDUStatus 
                 key={index} 
                 pdu={pdu} 
-                size='md'
+                size={combinedPduData.length>4 ? 'xs' : 'md'}
                 showName={false}
                 options={options}
                 />

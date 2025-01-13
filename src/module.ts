@@ -72,7 +72,7 @@ export const plugin = new PanelPlugin<SimpleOptions>(AlertingPanel).setPanelOpti
       path: 'rowURL', 
       name: 'rowURL',
       description: 'Row URL',
-      defaultValue: '/d/cdou123admle29sf/datacenter-view-rack',
+      defaultValue: '/d/a538aeff-5a8a-42a5-901c-938123fdd6f/datacenter-custom-row-panel',
       category: ['Row'],
     })
     .addTextInput({

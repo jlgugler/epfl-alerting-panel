@@ -192,20 +192,23 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
       value: status ? status.Value : null
     };
   });
-
-  const rowList: { row_id: string; row_name: string }[] = useMemo(() => {
-    const rowMap = new Map<string, string>(); // Key: row_name, Value: row_id
+  
+  const rowList: { row_id: string; row_name: string; dc_name: string }[] = useMemo(() => {
+    const rowMap = new Map<string, { row_id: string; dc_name: string }>(); // Key: row_name, Value: { row_id, dc_name }
+    
     rawRackData.forEach((item) => {
-      if (item.row_name && item.row_id && !rowMap.has(item.row_name)) {
-        rowMap.set(item.row_name, item.row_id);
+      if (item.row_name && item.row_id && item.dc_name && !rowMap.has(item.row_name)) {
+        rowMap.set(item.row_name, { row_id: item.row_id, dc_name: item.dc_name });
       }
     });
+  
     return Array.from(rowMap.entries())
-      .map(([row_name, row_id]) => ({ row_name, row_id }))
-        .sort((a, b) => a.row_name.localeCompare(b.row_name));
-    }, [rawRackData]);
-
-  return (
+      .map(([row_name, { row_id, dc_name }]) => ({ row_name, row_id, dc_name }))
+      .sort((a, b) => a.row_name.localeCompare(b.row_name));
+  }, [rawRackData]);
+  
+    
+    return (
     <div className={styles.AlertingPanelContainer}>
       <div className={styles.upsContainer}>
         {combinedUpsData.map((ups) => {
@@ -245,7 +248,7 @@ export const AlertingPanel: React.FC<Props> = ({ options, data, fieldConfig, id 
         })}
       </div>
       <div className={styles.textBox}>
-        PDU Panel by EPFL/ITOP-INFR v.0.2
+        PDU Panel by EPFL/ITOP-INFR v.0.25
       </div>
     </div>
   );
