@@ -9,9 +9,10 @@ interface FANStatusProps {
   size?: 'sm' | 'md' | 'lg';
   showName?: boolean;
   options: any;
+  getBaseUrlByType: (type: string) => string;
 }
 
-export const FANStatus: React.FC<FANStatusProps> = ({ pdu, size = 'sm', showName = false, options }) => {
+export const FANStatus: React.FC<FANStatusProps> = ({ pdu, size = 'sm', showName = false, options, getBaseUrlByType }) => {
   // Determine the size of the square based on the size prop
   const xSize = size === 'sm' ? `${options.pduSize}px` : size === 'md' ? `${options.pduSize * 2}px` : `${options.pduSize}px`;
   const ySize = size === 'sm' ? `${options.pduSize}px` : size === 'md' ? `${options.pduSize * 2}px` : `${options.pduSize}px`;
@@ -42,7 +43,7 @@ export const FANStatus: React.FC<FANStatusProps> = ({ pdu, size = 'sm', showName
         <div
           key={index}
           className={styles.fans}
-          onClick={() => window.open(`${options.fanURL}?var-pdu_name=${pdu.pdu_name}`, '_blank')}
+          onClick={() => window.open(`${getBaseUrlByType('fan')}?var-pdu_name=${pdu.pdu_name}`, '_blank')}
         />
         </Tooltip>
       ))}

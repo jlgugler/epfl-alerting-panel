@@ -9,9 +9,10 @@ interface RailStatusProps {
   size?: 'sm' | 'md' | 'lg';
   showName?: boolean;
   options: any;
+  getBaseUrlByType: (type: string) => string;
 }
 
-export const RailStatus: React.FC<RailStatusProps> = ({ rail, size = 'md', showName = false, options }) => {
+export const RailStatus: React.FC<RailStatusProps> = ({ rail, size = 'md', showName = false, options, getBaseUrlByType }) => {
   // Determine the size of the square based on the size prop
   const xSize = size === 'sm' ? `${options.railSize * 2 }px` : size === 'md' ? `${options.railSize}px` : `${options.railSize * .8}px`;
   const ySize = size === 'sm' ? `${options.railSize * 2 }px` : size === 'md' ? `${options.railSize * .1 }px` : `${options.railSize * .8}px`;
@@ -57,7 +58,7 @@ export const RailStatus: React.FC<RailStatusProps> = ({ rail, size = 'md', showN
         <div>
           <div
             className={styles.rail}
-            onClick={() => window.open(`${options.railURL}?var-pdu_name=${rail.pdu_name}`, '_blank')}
+            onClick={() => window.open(`${getBaseUrlByType('rail')}?var-pdu_name=${rail.pdu_name}`, '_blank')}
             />
           {showName && <span>{rail.pdu_name}</span>}
         </div>

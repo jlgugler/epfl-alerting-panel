@@ -9,9 +9,10 @@ interface UpsStatusProps {
   size?: 'sm' | 'md' | 'lg';
   showName?: boolean;
   options: any;
+  getBaseUrlByType: (type: string) => string;
 }
 
-export const UpsStatus: React.FC<UpsStatusProps> = ({ ups, size = 'sm', showName = false, options }) => {
+export const UpsStatus: React.FC<UpsStatusProps> = ({ ups, size = 'sm', showName = false, options, getBaseUrlByType }) => {
   // Determine the size of the square based on the size prop
   const xSize = size === 'sm' ? `${options.upsSizeWidth * .5 }px` : size === 'md' ? `${options.upsSizeWidth }px` : `${options.upsSizeWidth * 1.2}px`;
   const ySize = size === 'sm' ? `${options.upsSizeHeight * .5 }px` : size === 'md' ? `${options.upsSizeHeight }px` : `${options.upsSizeHeight * 1.2}px`;
@@ -67,7 +68,7 @@ export const UpsStatus: React.FC<UpsStatusProps> = ({ ups, size = 'sm', showName
           <div className={styles.upsName}>{upsName}</div>
           <div
             className={styles.ups}
-            onClick={() => window.open(`${options.upsURL}?var-ups_name=${ups.pdu_name}`, '_blank')}
+            onClick={() => window.open(`${getBaseUrlByType('ups')}?var-ups_name=${ups.pdu_name}`, '_blank')}
             />
           {showName && <span>{ups.ups_name}</span>}
         </div>

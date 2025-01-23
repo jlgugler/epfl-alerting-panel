@@ -9,14 +9,16 @@ interface RowStatusProps {
   rackData: any[];
   railData: any[];
   fanData: any[];
+  sensorData: any[];
   options: any;
   row: any;
   pduStatusData: any[];
   tcpStatusData: any[];
+  getBaseUrlByType: (type: string) => string;
 }
 
 
-const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, railData, row, pduStatusData, fanData, tcpStatusData }) => {
+const RowStatus: React.FC<RowStatusProps> = ({options, pduData  , rackData, railData, row, pduStatusData, fanData, tcpStatusData, sensorData, getBaseUrlByType }) => {
   const styles = {
     container: css`
       display: flex;
@@ -127,7 +129,7 @@ const railDataForCurrentRow = railData
         }>
           <div 
             className={styles.rowName}
-            onClick={() => window.open(`${options.rowURL}?var-row_name=${row.row_name}&var-dc_name=${row.dc_name}`, '_blank')}
+            onClick={() => window.open(`${getBaseUrlByType('row')}?var-row_name=${row.row_name}&var-dc_name=${row.dc_name}`, '_blank')}
             style={{ cursor: 'pointer' }}
           >
             <div style={{ wordWrap: 'break-word' }}>{row.row_name}</div>
@@ -144,6 +146,7 @@ const railDataForCurrentRow = railData
           <RailStatus 
             rail={rail}
             options={options}
+            getBaseUrlByType={getBaseUrlByType}
           />
         ))}
 
@@ -153,7 +156,9 @@ const railDataForCurrentRow = railData
         
         {rackData.map((rack) => (
           <RackStatus 
+            getBaseUrlByType={getBaseUrlByType}
             rack={rack}
+            sensorData={sensorData}
             row={row}
             pduData={pduDataForCurrentRow}
             pduStatusData={pduStatusDataForCurrentRow}

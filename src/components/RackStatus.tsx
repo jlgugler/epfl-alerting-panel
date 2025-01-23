@@ -10,9 +10,11 @@ interface RackStatusProps {
   pduData: any;
   pduStatusData: any;
   fanData: any;
+  sensorData: any;
+  getBaseUrlByType: (type: string) => string;
 }
 
-export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduData, pduStatusData, fanData }) => {
+export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduData, pduStatusData, fanData, sensorData, getBaseUrlByType }) => {
   const [_isHovered, setIsHovered] = useState(false);
 
 
@@ -24,7 +26,6 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       grid-template-rows: 1fr;
-      
       padding: 1px;
       background-color: #333;
     `,
@@ -87,6 +88,8 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
       {combinedPduData.map((pdu: any, index: any) => (
         <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
           <PDUStatus
+            sensorData={[]}
+            getBaseUrlByType={getBaseUrlByType}
             size={combinedPduData.length>4 ? 'xs' : 'sm'}
             pdu={pdu}
             
@@ -107,13 +110,21 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
       onClick={() => window.open(`${options.rackURL}?var-rack_fname=${rack.rack_fname}`, '_blank')}
       style={{ cursor: 'pointer' }}
     >
-      {rack.rack_name}
+      <Tooltip content={tooltipContent} placement="auto">
+        <div
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+        {rack.rack_name}
+        </div>
+      </Tooltip>
       </div> 
       <div className={styles.rackContainer}>
         <div className={styles.fanContainer}>
           {combinedFanData.map((fan: any, index: any) => (
             <div key={index} className={styles.fan}>
               <FANStatus 
+                getBaseUrlByType={getBaseUrlByType}
                 pdu={fan} 
                 size='sm'
                 showName={false}
@@ -122,24 +133,20 @@ export const RackStatus: React.FC<RackStatusProps> = ({ options, rack, row, pduD
             </div>
           ))}
         </div>
-        <Tooltip content={tooltipContent} placement="auto">
-          <div
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div className={styles.pduContainer}>
+        <div className={styles.pduContainer}>
             {combinedPduData.map((pdu: any, index: any) => (
-                <PDUStatus 
-                key={index} 
-                pdu={pdu} 
-                size={combinedPduData.length>4 ? 'xs' : 'md'}
-                showName={false}
-                options={options}
-                />
+                  <PDUStatus 
+                    getBaseUrlByType={getBaseUrlByType}
+                    key={index} 
+                    sensorData={sensorData}
+                    pdu={pdu} 
+                    size={combinedPduData.length>4 ? 'xs' : 'md'}
+                    showName={false}
+                    options={options}
+                  />
                 ))}
-            </div>
           </div>
-        </Tooltip>
+            
       </div>
       </div>
   );

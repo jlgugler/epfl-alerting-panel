@@ -39,13 +39,24 @@
         "PDUTextsize": "12",
         "RackTextsize": "10",
         "TooltipTextsize": "12",
+        "activeColor": "#0000ff",
+        "errorColor": "#ff0000",
+        "fanURL": "/d/ce0xm7wjr9ywwe/datacenter-view-fan",
         "pduSize": 5,
         "pduURL": "/d/ddqco4d3utj4asd/datacenter-view-pdu",
         "rackSize": 30,
         "rackURL": "/d/cdou123admle29sf/datacenter-view-rack",
+        "railSize": 50,
+        "railTextsize": "14",
+        "railURL": "/d/fdyyae74x0irka/datacenter-view-rail",
         "rowTextsize": "10",
         "rowURL": "/d/cdou123admle29sf/datacenter-view-rack",
-        "tooltips": true
+        "successColor": "#00ff00",
+        "tooltips": true,
+        "upsSizeHeight": 100,
+        "upsSizeWidth": 100,
+        "upsTextsize": "12",
+        "upsURL": "/d/ae0ubbk3if400d/datacenter-view-ups"
       },
       "targets": [
         {
@@ -400,6 +411,35 @@
           "range": false,
           "refId": "tcpStatus",
           "useBackend": false
+        },
+        {
+          "datasource": {
+            "type": "grafana-postgresql-datasource",
+            "uid": "ae0xvww1xfv28b"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "hide": false,
+          "rawQuery": true,
+          "rawSql": "SELECT *, id as \"_value\" FROM pdu WHERE dc_name = '$dc_name' AND pdu_type ='Sensor'",
+          "refId": "sensorInfo",
+          "sql": {
+            "columns": [
+              {
+                "parameters": [],
+                "type": "function"
+              }
+            ],
+            "groupBy": [
+              {
+                "property": {
+                  "type": "string"
+                },
+                "type": "groupBy"
+              }
+            ],
+            "limit": 50
+          }
         }
       ],
       "title": "$dc_name",
@@ -437,6 +477,6 @@
   "timezone": "",
   "title": "Provisioned pdu3 dashboard",
   "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
-  "version": 9,
+  "version": 12,
   "weekStart": ""
 }
